@@ -37,35 +37,35 @@ function isExcludeChar(char){
 	return false;
 }
 
-//文字列を受け取って、homu化して返す
+//文字列を受け取って、peko化して返す
 // "" → ""
-// "a","ab"         → ho
-// "abc","abcd"     → homu
-// "abcde","abcdef" → homuho 
-function abToHomu(str){
+// "a","ab"         → pe
+// "abc","abcd"     → peko
+// "abcde","abcdef" → pekope 
+function abToPeko(str){
 	var n = Math.round(str.length/2);
 	var str2 = "";
 	for(var i=0;i<n;i++){
 		if(i%2==0){
-			str2 += "ho";
+			str2 += "pe";
 		}else{
-			str2 += "mu";
+			str2 += "ko";
 		}
 	}
 	return str2;
 }
 
-//文字列を受け取って、ほむ化して返す
+//文字列を受け取って、ぺこ化して返す
 // "" → ""
-// "あ","ああ"         → ほむ
-// "あああ","ああああ" → ほむほむ
-function zenkakuToHomu(str){
+// "あ","ああ"         → ぺこ
+// "あああ","ああああ" → ぺこぺこ
+function zenkakuToPeko(str){
 	var len = str.length;
 	if(len%2==1)len ++;		//長さを偶数にする
 	len /= 2;				//半分にする
 	var str2 = "";
 	for(var i=0;i<len;i++){
-		str2 += "ほむ";
+		str2 += "ぺこ";
 	}
 	return str2;
 }
@@ -73,7 +73,7 @@ function zenkakuToHomu(str){
 //文字列を受け取って、最初に出てくるアルファベッド部分を抽出する
 //例) あ,い。、[うabcかきくdef。
 //①str1 : あ,い。、[う     → ・・・
-//②str2 : abc          → ほむ化
+//②str2 : abc          → ぺこ化
 //③str3 : かきくdef。  → 自分を再度呼び出し
 function pickAb(str){
 	if(str.length>0){
@@ -91,7 +91,7 @@ function pickAb(str){
 			str2 = "";
 			str3 = "";
 		}
-		return pickExclude(str1) + abToHomu(str2) + pickAb(str3);
+		return pickExclude(str1) + abToPeko(str2) + pickAb(str3);
 	}else{
 		return "";
 	}
@@ -99,7 +99,7 @@ function pickAb(str){
 
 //文字列を受け取って、最初に出てくる置換対象外部分を抽出する
 //例) ( あ,い。、[う
-//①str1 : ( あ,い → 全角部分をほむ化
+//①str1 : ( あ,い → 全角部分をぺこ化
 //②str2 : 。、    → 何もしない
 //③str3 : [う     → 自分を再度呼び出し
 function pickExclude(str){
@@ -139,7 +139,7 @@ function pickExclude(str){
 //文字列を受け取って、最初に出てくる全角部分を抽出する
 //例) /;:あいう;:,ああ
 //①str1 : /;:     → 何もしない
-//②str2 : あいう  → ほむ化
+//②str2 : あいう  → ぺこ化
 //③str3 : ;:,ああ → 自分を再度呼び出し
 function pickZenkaku(str){
 	if(str.length>0){
@@ -169,14 +169,14 @@ function pickZenkaku(str){
 			str2 = "";
 			str3 = "";
 		}
-		return str1 + zenkakuToHomu(str2) + pickZenkaku(str3);
+		return str1 + zenkakuToPeko(str2) + pickZenkaku(str3);
 	}else{
 		return "";
 	}
 }
 
-//文字列を受け取り、ほむ,homu化して返す
-function toHomu(str){
+//文字列を受け取り、ぺこ,peko化して返す
+function toPeko(str){
 	//文字列前後の空白を削除
 	var str2 = str.trim();
 	//文字列長が1以上の場合のみ変換を実施
@@ -190,9 +190,9 @@ function replaceObj(r){
 	while(o=r.childNodes[i++]){
 		replaceObj(o);
 	}
-	//現在のオブジェクトが文字列(nodeType3)だったときのみほむ化
+	//現在のオブジェクトが文字列(nodeType3)だったときのみぺこ化
 	if(r.nodeType==3) {
-		r.nodeValue=toHomu(r.nodeValue);
+		r.nodeValue=toPeko(r.nodeValue);
 	}
 }
 
